@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using vXboxInterfaceWrap;
 
-public class WindowXboxSimulator : MonoBehaviour
+public class WindowXboxSimulatorMono : MonoBehaviour
 {
   
     public string m_tutorialIfVbusDontExist= "https://github.com/EloiStree/OpenMacroInput/wiki/SCPvBusExeception";
@@ -15,12 +15,14 @@ public class WindowXboxSimulator : MonoBehaviour
     public bool m_disconnectAllAtStart=true; 
     public bool m_disconnectAllAtEnd=true;
 
+    public bool m_createConnectionAtStart;
 
-
-    public void Start()
+    public void Awake()
     {
         if(m_disconnectAllAtStart)
             AboardAll();
+        if (m_createConnectionAtStart)
+            CreateConnection();
     }
 
 
@@ -30,6 +32,7 @@ public class WindowXboxSimulator : MonoBehaviour
             AboardAll();
     }
 
+    [ContextMenu("Aboard all controller")]
     public void AboardAll()
     {
         for (uint i = 1; i <=4; i++)
@@ -72,7 +75,14 @@ public class WindowXboxSimulator : MonoBehaviour
                 }
             }
         }
+
     }
+
+    [ContextMenu("Launch Quick test")]
+    public void LaunchQuickTest() {
+        StartCoroutine(TestAllInputToCheck(3));
+    }
+
     IEnumerator TestAllInputToCheck(float timeBeforeStart)
     {
         yield return new WaitForSeconds(timeBeforeStart );
